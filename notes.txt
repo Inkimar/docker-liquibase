@@ -1,1 +1,5 @@
-psql -d test -U ingimar
+docker exec -it liquibase bash
+docker exec -it postgresql9 bash
+-> psql -d liquibase-test -U ingimar
+docker exec -it mysql8 bash
+
