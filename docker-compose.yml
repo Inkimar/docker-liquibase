@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  db:
+    image: sameersbn/postgresql:9.6-2
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      - DB_USER=ingimar
+      - DB_PASS=passw0rd
+      - DB_NAME=test
+    volumes:
+      - db_accounts:/var/lib/postgresql
+
+  liquibase:
+    image: inki/liquibase:latest
+    container_name: liquibase
+
+volumes:
+  db_accounts:

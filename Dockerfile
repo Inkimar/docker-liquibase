@@ -31,3 +31,4 @@ VOLUME ["/changelogs"]
 WORKDIR /
 
 ENTRYPOINT ["/bin/bash"]
+
