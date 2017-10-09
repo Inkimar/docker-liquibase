@@ -17,6 +17,10 @@ services:
   liquibase:
     image: inki/liquibase:latest
     container_name: liquibase
+    tty: true
+    volumes:
+      - liquibase:/changelogs
 
 volumes:
   db_accounts:
+  liquibase:
