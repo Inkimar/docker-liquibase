@@ -3,3 +3,41 @@ docker exec -it postgresql9 bash
 -> psql -d liquibase-test -U ingimar
 docker exec -it mysql8 bash
 
+
+./liquibase_command.sh -e CONNECTION_STRING="jdbc:postgresql://db1:5432/ingimar" -e DB_USER="ingimar" -e DB_PASS="password" -v /test1.xml:/changelogs inki/liquibase "diff"
+
+
+
+docker run -it --name liquibase-ink --link postgresql9:db --entrypoint="/scripts/liquibase_command.sh" -e CONNECTION_STRING="jdbc:postgresql://db1:5432/liquibase-test" -e DB_USER="ingimar" -e DB_PASS="password" -v /test1.xml:/changelogs inki/liquibase "diff"
+
+
+
+./liquibase_command.sh -e CONNECTION_STRING="jdbc:postgresql://db1:5432/liquibase-test" -e DB_USER="ingimar" -e DB_PASS="password" -v /test1.xml:/changelogs inki/liquibase "diff"
+
+https://stackoverflow.com/questions/13552773/create-database-tables-etc-in-one-script-postgresql
+\c liquibase-test 
+ CREATE TABLE testtable (testcolumn int);
+
+docker run -it \
+--name $LIQUIBASE_CONTAINER \
+--link $REFERENCE_DB_CONTAINER:db \
+--entrypoint="/scripts/liquibase_command.sh" \
+-e CONNECTION_STRING="jdbc:postgresql://$DB_IP:5432/$DB_NAME" \
+-e DB_USER="$DB_USER" \
+-e DB_PASS="$DB_PASS" \
+-e LIQUIBASE_INCLUSION_FILE="$LIQUIBASE_INCLUSION_FILE" \
+-v /$LIQUIBASE_CHANGELOGS:/changelogs \
+sequenceiq/docker-liquibase \
+"diff"
+
+The variables should be set as follows:
+
+LIQUIBASE_CONTAINER - the name of the docker container
+REFERENCE_DB_CONTAINER - the docker container running a (postgres) database being the reference of the diff command
+CONNECTION_STRING - the connection to the target database
+DB_IP - the IP address of the target database
+DB_NAME - the target database name
+DB_USER - the user to the target database
+DB_PASS - password to the target database
+LIQUIBASE_INCLUSION_FILE - changelog file name in the changelogs folder, the generated diff file will be added as an include tag to it if provided
+LIQUIBASE_CHANGELOGS - volume on the host machine, where the generated file will be written

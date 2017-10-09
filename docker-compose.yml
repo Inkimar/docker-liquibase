@@ -6,6 +6,8 @@ services:
     image: sameersbn/postgresql:9.6-2
     container_name: postgresql9
     env_file: .env/.env_postgresql
+    ports:
+      - "5432:5432"
     volumes:
       - db_post-accounts:/var/lib/postgresql
 
@@ -22,6 +24,10 @@ services:
     image: inki/liquibase:latest
     container_name: liquibase
     tty: true
+    depends_on:
+      - db2
+    links:
+      - db2
     volumes:
       - liquibase:/changelogs
 
